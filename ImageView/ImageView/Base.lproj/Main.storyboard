@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X9x-l8-uTp">
-                                <rect key="frame" x="0.0" y="114" width="414" height="748"/>
+                                <rect key="frame" x="0.0" y="165" width="414" height="697"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eeW-i6-axz">
                                     <size key="itemSize" width="128" height="128"/>
@@ -37,14 +37,24 @@
                                 <color key="textColor" systemColor="systemGreenColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <searchBar contentMode="redraw" barStyle="black" placeholder="Search Images" translatesAutoresizingMaskIntoConstraints="NO" id="prV-Gg-9dy">
+                                <rect key="frame" x="0.0" y="94" width="414" height="51"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="barTintColor" red="0.10378875732421876" green="0.1024749755859375" blue="0.1051025390625" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="X9x-l8-uTp" firstAttribute="top" secondItem="Me8-HO-VgL" secondAttribute="bottom" constant="20" id="67T-NW-Qiq"/>
                             <constraint firstItem="X9x-l8-uTp" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="BHq-11-hVy"/>
                             <constraint firstItem="Me8-HO-VgL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Ddn-Oz-c2f"/>
+                            <constraint firstItem="X9x-l8-uTp" firstAttribute="top" secondItem="prV-Gg-9dy" secondAttribute="bottom" constant="20" id="Enc-hk-YZM"/>
+                            <constraint firstItem="prV-Gg-9dy" firstAttribute="top" secondItem="Me8-HO-VgL" secondAttribute="bottom" id="HnQ-y9-Q1t"/>
+                            <constraint firstItem="prV-Gg-9dy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="MId-zW-tBC"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Me8-HO-VgL" secondAttribute="trailing" constant="20" id="Mx9-ZU-Ho4"/>
+                            <constraint firstItem="prV-Gg-9dy" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="WJm-nb-UpN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="X9x-l8-uTp" secondAttribute="trailing" id="bxm-Cn-in5"/>
                             <constraint firstItem="Me8-HO-VgL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="jqL-oP-ltG"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="X9x-l8-uTp" secondAttribute="bottom" id="tfI-J9-UMm"/>
@@ -52,6 +62,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="X9x-l8-uTp" id="G0D-hU-xMg"/>
+                        <outlet property="searchImageBar" destination="prV-Gg-9dy" id="mDw-P2-neC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
