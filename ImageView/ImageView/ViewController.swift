@@ -8,16 +8,16 @@
 import UIKit
 import Alamofire
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var searchImageBar: UISearchBar!
     
-    var pixaBayData: PixaBayData?
     var page = 1
     var pixaBayImageSets: [PixaBayImageModel] = []
-    var maxImageSets: Int64 = 0
     var cacheImages: [String: Data] = [:]
     var key = ""
+    var searchImagesString = "apple"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +25,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.collectionView.register(UINib(nibName: "PixaBayCollectionCell", bundle: nil), forCellWithReuseIdentifier: "PixaBayCollectionCell")
         collectionView.dataSource = self
         collectionView.delegate = self
+        searchImageBar.delegate = self
         
     }
     
@@ -37,7 +38,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
      */
     func getPixaBayimageSets()  {
         
-        let pixabayEndPoint: String = "https://pixabay.com/api/?key=\(key)&q=yellow+flowers&image_type=photo&per_page=50&page=\(page)"
+        if searchImagesString == "" {
+            let alert = UIAlertController(title: "Text Required", message: "Search bar should not be empty", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        let pixabayEndPoint: String = "https://pixabay.com/api/?key=\(key)&q=\(searchImagesString)&image_type=photo&per_page=50&page=\(page)"
         
         AF.request(pixabayEndPoint, method: .get, encoding: JSONEncoding.default)
             .responseData { [self] response in
@@ -46,8 +54,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 switch response.result {
                 case .success(let data):
                     do{
-                        self.pixaBayData = try JSONDecoder().decode(PixaBayData.self, from: data)
-                        if (self.pixaBayData?.totalHits != nil && self.pixaBayData!.totalHits! > 0) {
+                        var pixaBayData: PixaBayData?
+                        var maxImageSets: Int64 = 0
+                        pixaBayData = try JSONDecoder().decode(PixaBayData.self, from: data)
+                        if (pixaBayData?.totalHits != nil && pixaBayData!.totalHits! > 0) {
                             maxImageSets = pixaBayData!.totalHits!
                             if pixaBayImageSets.count < maxImageSets {
                                 pixaBayImageSets.append(contentsOf: pixaBayData?.hits ?? [])
@@ -55,7 +65,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                             }
                         }
                     }catch{
-                        print("errore durante la decodifica dei dati: \(error)")
+                        print("error: \(error)")
                     }
                 case .failure(let error):
                     print(response, error)
@@ -75,10 +85,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         Returns the Number of cells for collectionView, varies with set of images
      */
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if pixaBayData != nil {
-            return pixaBayImageSets.count
-        }
-        return 0
+        return pixaBayImageSets.count
     }
     
     /**
@@ -148,6 +155,34 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func stopLoader(cell: PixaBayCollectionCell) {
         cell.loader.stopAnimating()
         cell.loader.isHidden = true
+    }
+    
+}
+
+extension ViewController {
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.text = searchImagesString
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+        if searchBar.text == searchImagesString {
+            return
+        }
+        if let searchText = searchBar.text {
+            searchImagesString = searchText.components(separatedBy: .whitespaces).filter { !$0.isEmpty }.joined(separator: " ")
+            print("searchImagesString :: \(searchImagesString)")
+            resetCells()
+            getPixaBayimageSets()
+        }
+    }
+    
+    func resetCells() {
+        page = 1
+        pixaBayImageSets = []
+        cacheImages = [:]
+        collectionView.reloadData()
     }
     
 }

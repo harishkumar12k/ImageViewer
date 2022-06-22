@@ -25,17 +25,28 @@ class ImageDetailView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        loadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        self.userLabel.text = pixaBayImageData.user
-        self.resolutionLabel.text = "\(pixaBayImageData.imageWidth)x\(pixaBayImageData.imageHeight)"
-        self.loadImage(url: pixaBayImageData.largeImageURL)
-        self.tags.text = pixaBayImageData.tags
-        imageView.addGradientForLikes()
-        self.likesLabel.text = "♥ \((self.pixaBayImageData.likes as NSNumber).stringValue)"
-        self.viewWillLayoutSubviews()
+        loadData()
+    }
+    
+    func loadData() {
+        if pixaBayImageData == nil {
+            return
+        }
+        DispatchQueue.main.async {
+            self.userLabel.text = self.pixaBayImageData.user
+            self.resolutionLabel.text = "\(self.pixaBayImageData.imageWidth)x\(self.pixaBayImageData.imageHeight)"
+            self.loadImage(url: self.pixaBayImageData.largeImageURL)
+            self.tags.text = self.pixaBayImageData.tags
+            self.imageView.addGradientForLikes()
+            self.likesLabel.text = "♥ \((self.pixaBayImageData.likes as NSNumber).stringValue)"
+        }
     }
 
     func loadImage(url: String){
