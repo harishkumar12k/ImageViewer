@@ -16,7 +16,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var page = 1
     var pixaBayImageSets: [PixaBayImageModel] = []
     var cacheImages: [String: Data] = [:]
-    var key = "27933600-0d42f2ac5afa15c761e311cce"
+    var key = ""
     var searchImagesString = "apple"
     
     override func viewDidLoad() {
